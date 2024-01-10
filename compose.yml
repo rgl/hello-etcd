@@ -1,0 +1,31 @@
+# see https://github.com/compose-spec/compose-spec
+# see https://docs.docker.com/compose/overview/
+# see https://docs.docker.com/compose/compose-file/
+services:
+  hello:
+    build:
+      context: .
+      args:
+        - HELLO_VERSION=${HELLO_VERSION:-0.0.0-dev}
+        - HELLO_REVISION=${HELLO_REVISION:-0000000000000000000000000000000000000000}
+    ports:
+      - 8888:8888
+    depends_on:
+      - etcd
+    restart: on-failure
+  etcd:
+    # see https://etcd.io/docs/v3.5/op-guide/container/#docker
+    # see https://github.com/etcd-io/etcd/releases
+    # see https://github.com/etcd-io/etcd/blob/v3.5.11/Dockerfile-release.amd64
+    # see https://gcr.io/etcd-development/etcd
+    image: gcr.io/etcd-development/etcd:v3.5.11
+    command:
+      - /usr/local/bin/etcd
+      - --advertise-client-urls=http://0.0.0.0:2379
+      - --listen-client-urls=http://0.0.0.0:2379
+      - --data-dir=/etcd-data
+    restart: on-failure
+    volumes:
+      - etcd-data:/etcd-data
+volumes:
+  etcd-data:
