@@ -1,0 +1,175 @@
+---
+# see https://kubernetes.io/docs/concepts/services-networking/service/#nodeport
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#service-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#serviceport-v1-core
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-etcd
+spec:
+  type: ClusterIP
+  selector:
+    app: hello-etcd
+  ports:
+    - name: web
+      port: 80
+      protocol: TCP
+      targetPort: web
+---
+# see https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#deployment-v1-apps
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#podtemplatespec-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#container-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#podsecuritycontext-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#securitycontext-v1-core
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-etcd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-etcd
+  template:
+    metadata:
+      labels:
+        app: hello-etcd
+    spec:
+      enableServiceLinks: false
+      containers:
+        # see https://github.com/rgl/hello-etcd/pkgs/container/hello-etcd
+        # see https://github.com/rgl/hello-etcd
+        - name: hello-etcd
+          image: ghcr.io/rgl/hello-etcd:0.0.1
+          args:
+            - --etcd-address=hello-etcd-etcd:2379
+          env:
+            # see https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/
+            # see https://github.com/kubernetes/kubernetes/blob/v1.27.9/test/e2e/common/node/downwardapi.go
+            - name: HELLO_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: HELLO_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: HELLO_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: HELLO_POD_UID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.uid
+            - name: HELLO_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          ports:
+            - name: web
+              containerPort: 8888
+          resources:
+            requests:
+              memory: 16Mi
+              cpu: '0.1'
+            limits:
+              memory: 16Mi
+              cpu: '0.1'
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+---
+# see https://kubernetes.io/docs/concepts/services-networking/service/#nodeport
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#service-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#serviceport-v1-core
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-etcd-etcd
+spec:
+  type: ClusterIP
+  selector:
+    app: hello-etcd-etcd
+  ports:
+    - name: etcd
+      port: 2379
+      protocol: TCP
+      targetPort: etcd
+---
+# see https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+# see https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#statefulset-v1-apps
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#podtemplatespec-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#container-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#persistentvolumeclaim-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#storageclass-v1-storage-k8s-io
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#podsecuritycontext-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#securitycontext-v1-core
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hello-etcd-etcd
+spec:
+  selector:
+    matchLabels:
+      app: hello-etcd-etcd
+  template:
+    metadata:
+      labels:
+        app: hello-etcd-etcd
+    spec:
+      enableServiceLinks: false
+      containers:
+        # see https://etcd.io/docs/v3.5/op-guide/container/#docker
+        # see https://github.com/etcd-io/etcd/releases
+        # see https://github.com/etcd-io/etcd/blob/v3.5.11/Dockerfile-release.amd64
+        # see https://gcr.io/etcd-development/etcd
+        - name: etcd
+          image: gcr.io/etcd-development/etcd:v3.5.11
+          command:
+            - /usr/local/bin/etcd
+            - --advertise-client-urls=http://0.0.0.0:2379
+            - --listen-client-urls=http://0.0.0.0:2379
+            - --data-dir=/etcd-data
+          ports:
+            - name: etcd
+              containerPort: 2379
+          resources:
+            requests:
+              memory: 16Mi
+              cpu: '0.1'
+            limits:
+              memory: 16Mi
+              cpu: '0.1'
+          volumeMounts:
+            - name: etcd-data
+              mountPath: /etcd-data
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            runAsGroup: 65534
+            seccompProfile:
+              type: RuntimeDefault
+  volumeClaimTemplates:
+    - metadata:
+        name: etcd-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 16Mi
