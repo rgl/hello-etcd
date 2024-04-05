@@ -114,7 +114,7 @@ Recreate the resources:
 kubectl apply -f manifest.yml
 kubectl rollout status deployment hello-etcd
 kubectl rollout status statefulset hello-etcd-etcd
-kubectl get service,pod,pvc,pv,sc
+kubectl get service,statefulset,pod,pvc,pv,sc
 ```
 
 Access the `hello-etcd` service from a [kubectl port-forward local port](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/):
