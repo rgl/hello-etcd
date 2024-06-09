@@ -41,7 +41,7 @@ spec:
         # see https://github.com/rgl/hello-etcd/pkgs/container/hello-etcd
         # see https://github.com/rgl/hello-etcd
         - name: hello-etcd
-          image: ghcr.io/rgl/hello-etcd:0.0.1
+          image: ghcr.io/rgl/hello-etcd:0.0.3
           args:
             - --etcd-address=hello-etcd-etcd:2379
           env:
