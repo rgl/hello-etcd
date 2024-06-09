@@ -86,7 +86,7 @@ Access the `hello-etcd` service from a [kubectl port-forward local port](https:/
 
 ```bash
 kubectl port-forward service/hello-etcd 6789:web &
-sleep 1
+sleep 3
 wget -qO- http://localhost:6789 # Hello World #1!
 wget -qO- http://localhost:6789 # Hello World #2!
 wget -qO- http://localhost:6789 # Hello World #3!
@@ -122,7 +122,7 @@ Access the `hello-etcd` service from a [kubectl port-forward local port](https:/
 
 ```bash
 kubectl port-forward service/hello-etcd 6789:web &
-sleep 1
+sleep 3
 wget -qO- http://localhost:6789 # Hello World #4!
 wget -qO- http://localhost:6789 # Hello World #5!
 wget -qO- http://localhost:6789 # Hello World #6!
