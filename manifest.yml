@@ -112,6 +112,7 @@ metadata:
   name: hello-etcd-etcd
 spec:
   type: ClusterIP
+  clusterIP: None
   selector:
     app: hello-etcd-etcd
   ports:
@@ -136,6 +137,7 @@ kind: StatefulSet
 metadata:
   name: hello-etcd-etcd
 spec:
+  serviceName: hello-etcd-etcd
   selector:
     matchLabels:
       app: hello-etcd-etcd
