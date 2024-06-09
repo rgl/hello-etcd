@@ -86,10 +86,12 @@ Access the `hello-etcd` service from a [kubectl port-forward local port](https:/
 
 ```bash
 kubectl port-forward service/hello-etcd 6789:web &
+sleep 1
 wget -qO- http://localhost:6789 # Hello World #1!
 wget -qO- http://localhost:6789 # Hello World #2!
 wget -qO- http://localhost:6789 # Hello World #3!
 kill %1
+sleep 1
 ```
 
 Delete the resources:
@@ -120,10 +122,12 @@ Access the `hello-etcd` service from a [kubectl port-forward local port](https:/
 
 ```bash
 kubectl port-forward service/hello-etcd 6789:web &
+sleep 1
 wget -qO- http://localhost:6789 # Hello World #4!
 wget -qO- http://localhost:6789 # Hello World #5!
 wget -qO- http://localhost:6789 # Hello World #6!
 kill %1
+sleep 1
 ```
 
 Notice that the hello counter resumes where it was left off due to etcd using a
