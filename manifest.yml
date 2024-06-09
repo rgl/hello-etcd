@@ -123,8 +123,10 @@ spec:
 # see https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
 # see https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 # see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#statefulset-v1-apps
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#statefulsetspec-v1-apps
 # see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#podtemplatespec-v1-core
 # see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#container-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#statefulsetpersistentvolumeclaimretentionpolicy-v1-apps
 # see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#persistentvolumeclaim-v1-core
 # see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#storageclass-v1-storage-k8s-io
 # see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#podsecuritycontext-v1-core
@@ -182,6 +184,9 @@ spec:
       securityContext:
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
   volumeClaimTemplates:
     - metadata:
         name: etcd-data

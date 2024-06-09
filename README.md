@@ -94,8 +94,7 @@ kill %1
 
 Delete the resources:
 
-**NB** Since we are using a `StatefulSet`, the `PersistentVolumeClaim` and
-`PersistentVolume` resources are not automatically deleted.
+**NB** Since we are using a `StatefulSet` with `persistentVolumeClaimRetentionPolicy` set to `Retain` (the default), the `PersistentVolumeClaim` and `PersistentVolume` resources are not automatically deleted.
 
 ```bash
 kubectl delete -f manifest.yml
