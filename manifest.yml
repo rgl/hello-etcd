@@ -149,6 +149,7 @@ spec:
       enableServiceLinks: false
       containers:
         # see https://etcd.io/docs/v3.5/op-guide/container/#docker
+        # see https://etcd.io/docs/v3.5/op-guide/monitoring/#health-check
         # see https://github.com/etcd-io/etcd/releases
         # see https://github.com/etcd-io/etcd/blob/v3.5.17/Dockerfile-release.amd64
         # see https://gcr.io/etcd-development/etcd
@@ -159,6 +160,20 @@ spec:
             - --advertise-client-urls=http://0.0.0.0:2379
             - --listen-client-urls=http://0.0.0.0:2379
             - --data-dir=/etcd-data
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: 2379
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 2379
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 5
           ports:
             - name: etcd
               containerPort: 2379

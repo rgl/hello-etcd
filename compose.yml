@@ -11,7 +11,8 @@ services:
     ports:
       - 8888:8888
     depends_on:
-      - etcd
+      etcd:
+        condition: service_healthy
     restart: on-failure
   etcd:
     # see https://etcd.io/docs/v3.5/op-guide/container/#docker
@@ -24,6 +25,12 @@ services:
       - --advertise-client-urls=http://0.0.0.0:2379
       - --listen-client-urls=http://0.0.0.0:2379
       - --data-dir=/etcd-data
+    healthcheck:
+      test: ["CMD", "etcdctl", "endpoint", "health", "--dial-timeout=2s", "--command-timeout=3s"]
+      start_period: 5s
+      interval: 15s
+      timeout: 5s
+      retries: 2
     restart: on-failure
     volumes:
       - etcd-data:/etcd-data
