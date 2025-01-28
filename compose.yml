@@ -17,9 +17,9 @@ services:
   etcd:
     # see https://etcd.io/docs/v3.5/op-guide/container/#docker
     # see https://github.com/etcd-io/etcd/releases
-    # see https://github.com/etcd-io/etcd/blob/v3.5.17/Dockerfile-release.amd64
+    # see https://github.com/etcd-io/etcd/blob/v3.5.18/Dockerfile-release.amd64
     # see https://gcr.io/etcd-development/etcd
-    image: gcr.io/etcd-development/etcd:v3.5.17
+    image: gcr.io/etcd-development/etcd:v3.5.18
     command:
       - /usr/local/bin/etcd
       - --advertise-client-urls=http://0.0.0.0:2379
