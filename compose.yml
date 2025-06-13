@@ -15,11 +15,11 @@ services:
         condition: service_healthy
     restart: on-failure
   etcd:
-    # see https://etcd.io/docs/v3.5/op-guide/container/#docker
+    # see https://etcd.io/docs/v3.6/op-guide/container/#docker
     # see https://github.com/etcd-io/etcd/releases
-    # see https://github.com/etcd-io/etcd/blob/v3.5.18/Dockerfile-release.amd64
+    # see https://github.com/etcd-io/etcd/blob/v3.6.1/Dockerfile-release.amd64
     # see https://gcr.io/etcd-development/etcd
-    image: gcr.io/etcd-development/etcd:v3.5.18
+    image: gcr.io/etcd-development/etcd:v3.6.1
     command:
       - /usr/local/bin/etcd
       - --advertise-client-urls=http://0.0.0.0:2379

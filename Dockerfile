@@ -1,6 +1,6 @@
-# syntax=docker.io/docker/dockerfile:1.13
+# syntax=docker.io/docker/dockerfile:1.16
 
-FROM golang:1.23.5-bookworm as builder
+FROM golang:1.24.4-bookworm AS builder
 WORKDIR /src
 COPY go.* ./
 RUN go mod download
