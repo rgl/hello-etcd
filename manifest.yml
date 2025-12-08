@@ -1,7 +1,7 @@
 ---
 # see https://kubernetes.io/docs/concepts/services-networking/service/#nodeport
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#service-v1-core
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#serviceport-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#service-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#serviceport-v1-core
 apiVersion: v1
 kind: Service
 metadata:
@@ -17,11 +17,11 @@ spec:
       targetPort: web
 ---
 # see https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#deployment-v1-apps
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#podtemplatespec-v1-core
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#container-v1-core
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#podsecuritycontext-v1-core
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#securitycontext-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#deployment-v1-apps
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#podtemplatespec-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#container-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#podsecuritycontext-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#securitycontext-v1-core
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -41,7 +41,7 @@ spec:
         # see https://github.com/rgl/hello-etcd/pkgs/container/hello-etcd
         # see https://github.com/rgl/hello-etcd
         - name: hello-etcd
-          image: ghcr.io/rgl/hello-etcd:0.0.5
+          image: ghcr.io/rgl/hello-etcd:0.0.6
           args:
             - --etcd-address=hello-etcd-etcd:2379
           env:
@@ -62,7 +62,7 @@ spec:
                 resourceFieldRef:
                   resource: limits.cpu
             # see https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/
-            # see https://github.com/kubernetes/kubernetes/blob/v1.30.1/test/e2e/common/node/downwardapi.go
+            # see https://github.com/kubernetes/kubernetes/blob/v1.34.2/test/e2e/common/node/downwardapi.go
             - name: HELLO_NODE_NAME
               valueFrom:
                 fieldRef:
@@ -104,8 +104,8 @@ spec:
               type: RuntimeDefault
 ---
 # see https://kubernetes.io/docs/concepts/services-networking/service/#nodeport
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#service-v1-core
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#serviceport-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#service-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#serviceport-v1-core
 apiVersion: v1
 kind: Service
 metadata:
@@ -123,15 +123,15 @@ spec:
 ---
 # see https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
 # see https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#statefulset-v1-apps
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#statefulsetspec-v1-apps
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#podtemplatespec-v1-core
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#container-v1-core
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#statefulsetpersistentvolumeclaimretentionpolicy-v1-apps
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#persistentvolumeclaim-v1-core
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#storageclass-v1-storage-k8s-io
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#podsecuritycontext-v1-core
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#securitycontext-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#statefulset-v1-apps
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#statefulsetspec-v1-apps
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#podtemplatespec-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#container-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#statefulsetpersistentvolumeclaimretentionpolicy-v1-apps
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#persistentvolumeclaim-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#storageclass-v1-storage-k8s-io
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#podsecuritycontext-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#securitycontext-v1-core
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -151,10 +151,10 @@ spec:
         # see https://etcd.io/docs/v3.6/op-guide/container/#docker
         # see https://etcd.io/docs/v3.6/op-guide/monitoring/#health-check
         # see https://github.com/etcd-io/etcd/releases
-        # see https://github.com/etcd-io/etcd/blob/v3.6.1/Dockerfile-release.amd64
+        # see https://github.com/etcd-io/etcd/blob/v3.6.6/Dockerfile
         # see https://gcr.io/etcd-development/etcd
         - name: etcd
-          image: gcr.io/etcd-development/etcd:v3.6.1
+          image: gcr.io/etcd-development/etcd:v3.6.6
           command:
             - /usr/local/bin/etcd
             - --advertise-client-urls=http://0.0.0.0:2379
