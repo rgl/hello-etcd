@@ -45,7 +45,7 @@ counter resumes where it was left off due to etcd using a persistent volume.
 Destroy the environment, including the persistent volumes:
 
 ```bash
-docker compose down --volumes
+docker compose down --volumes --timeout=0
 ```
 
 # Kubernetes Usage
